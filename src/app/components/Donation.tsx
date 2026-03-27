@@ -8,6 +8,7 @@ export function Donation() {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(100);
   const [customAmount, setCustomAmount] = useState("");
   const [isCustom, setIsCustom] = useState(false);
+  const cashAppHandles = ["$DrGeeee", "$DrHamilton4you"];
 
   const handlePresetClick = (amount: number) => {
     setSelectedAmount(amount);
@@ -22,7 +23,9 @@ export function Donation() {
 
   const handleDonate = () => {
     const amount = isCustom ? customAmount : selectedAmount;
-    alert(`Thank you for your pledge to donate $${amount}! In a real implementation, this would connect to a payment processor like Stripe.`);
+    alert(
+      `Thank you for your pledge to donate $${amount}. Please send your donation via Cash App to ${cashAppHandles.join(" or ")}.`,
+    );
   };
 
   return (
@@ -118,6 +121,19 @@ export function Donation() {
           >
             Donate ${isCustom ? customAmount || "0" : selectedAmount || "0"}
           </button>
+
+          <div className="mb-6 rounded-2xl bg-[#F9FAFB] p-5 text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1E3A5F]/70 mb-3">
+              Donate via Cash App
+            </p>
+            <div className="space-y-2">
+              {cashAppHandles.map((handle) => (
+                <p key={handle} className="text-2xl font-bold text-[#1E3A5F]">
+                  {handle}
+                </p>
+              ))}
+            </div>
+          </div>
 
           {/* Trust Indicators */}
           <div className="grid md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
