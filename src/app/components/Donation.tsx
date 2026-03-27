@@ -1,32 +1,8 @@
 import { motion } from "motion/react";
-import { useState } from "react";
 import { CheckCircle, Shield, Heart } from "lucide-react";
 
-const presetAmounts = [25, 50, 100, 250];
-
 export function Donation() {
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(100);
-  const [customAmount, setCustomAmount] = useState("");
-  const [isCustom, setIsCustom] = useState(false);
   const cashAppHandles = ["$DrGeeee", "$DrHamilton4you"];
-
-  const handlePresetClick = (amount: number) => {
-    setSelectedAmount(amount);
-    setIsCustom(false);
-    setCustomAmount("");
-  };
-
-  const handleCustomClick = () => {
-    setIsCustom(true);
-    setSelectedAmount(null);
-  };
-
-  const handleDonate = () => {
-    const amount = isCustom ? customAmount : selectedAmount;
-    alert(
-      `Thank you for your pledge to donate $${amount}. Please send your donation via Cash App to ${cashAppHandles.join(" or ")}.`,
-    );
-  };
 
   return (
     <section id="donation" className="py-20 md:py-28 bg-gradient-to-br from-[#1E3A5F] to-[#6BAF92] relative overflow-hidden">
@@ -59,69 +35,6 @@ export function Donation() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl"
         >
-          <div className="mb-8">
-            <label className="block text-[#1E3A5F] mb-4">
-              Select Your Donation Amount
-            </label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-              {presetAmounts.map((amount) => (
-                <button
-                  key={amount}
-                  onClick={() => handlePresetClick(amount)}
-                  className={`py-4 rounded-xl transition-all duration-300 ${
-                    selectedAmount === amount
-                      ? "bg-[#F59E0B] text-white shadow-lg scale-105"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  ${amount}
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={handleCustomClick}
-              className={`w-full py-4 rounded-xl transition-all duration-300 ${
-                isCustom
-                  ? "bg-[#F59E0B] text-white shadow-lg"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              Custom Amount
-            </button>
-          </div>
-
-          {isCustom && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              className="mb-8"
-            >
-              <label className="block text-[#1E3A5F] mb-2">
-                Enter Custom Amount
-              </label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg">
-                  $
-                </span>
-                <input
-                  type="number"
-                  value={customAmount}
-                  onChange={(e) => setCustomAmount(e.target.value)}
-                  placeholder="0.00"
-                  className="w-full pl-10 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-[#F59E0B] focus:outline-none transition-colors"
-                />
-              </div>
-            </motion.div>
-          )}
-
-          <button
-            onClick={handleDonate}
-            disabled={!selectedAmount && (!isCustom || !customAmount)}
-            className="w-full bg-[#F59E0B] hover:bg-[#F59E0B]/90 text-white py-5 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mb-6"
-          >
-            Donate ${isCustom ? customAmount || "0" : selectedAmount || "0"}
-          </button>
-
           <div className="mb-6 rounded-2xl bg-[#F9FAFB] p-5 text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1E3A5F]/70 mb-3">
               Donate via Cash App
@@ -133,6 +46,9 @@ export function Donation() {
                 </p>
               ))}
             </div>
+            <p className="mt-4 text-sm text-gray-600">
+              Send any amount directly to either Cash App handle above.
+            </p>
           </div>
 
           {/* Trust Indicators */}

@@ -94,7 +94,6 @@ export function Footer() {
             </p>
             <p className="text-white/60 text-sm text-center md:text-right">
               Your donations make a direct impact in our community.<br />
-              Tax ID: XX-XXXXXXX | 501(c)(3) Nonprofit Organization
             </p>
           </div>
         </div>
