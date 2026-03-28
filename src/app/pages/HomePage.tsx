@@ -111,6 +111,49 @@ export function HomePage() {
       </section>
 
       <section className="px-6 py-20 md:py-24">
+        <div className="mx-auto max-w-6xl rounded-[2rem] border border-[#1E3A5F]/10 bg-white p-8 shadow-[0_20px_60px_rgba(30,58,95,0.08)] md:p-10">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">Fundraising Support</p>
+            <h2 className="mt-4 text-3xl font-bold text-[#1E3A5F] md:text-4xl">
+              Support the mission behind LifeResource4You LLC
+            </h2>
+            <p className="mt-5 max-w-4xl text-lg leading-8 text-gray-700">
+              In addition to our clinical and operational work, contributions help support recovery-focused outreach,
+              service development, and the continued growth of programs that serve individuals and families in need.
+            </p>
+            <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="rounded-[1.5rem] bg-[#F9FAFB] p-6">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1E3A5F]/55">Donate via Cash App</p>
+                <div className="mt-5 space-y-3">
+                  {cashAppHandles.map((handle) => (
+                    <div key={handle} className="rounded-2xl bg-white px-5 py-4 text-2xl font-bold text-[#1E3A5F] shadow-sm">
+                      {handle}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[1.5rem] bg-[#1E3A5F] p-6 text-white">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/60">Why Give</p>
+                <p className="mt-5 text-lg leading-8 text-white/88">
+                  Your support helps strengthen the work, reach, and long-term impact of LifeResource4You LLC. Every
+                  contribution supports a broader mission of building programs, supporting recovery, and creating real
+                  opportunities for change.
+                </p>
+                <p className="mt-6 text-base font-semibold text-white/92">
+                  Send donations directly to either Cash App handle listed here.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="px-6 py-20 md:py-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -183,49 +226,6 @@ export function HomePage() {
               </motion.article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="px-6 pb-20 md:pb-24">
-        <div className="mx-auto max-w-6xl rounded-[2rem] border border-[#1E3A5F]/10 bg-white p-8 shadow-[0_20px_60px_rgba(30,58,95,0.08)] md:p-10">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">Fundraising Support</p>
-            <h2 className="mt-4 text-3xl font-bold text-[#1E3A5F] md:text-4xl">
-              Support the mission behind LifeResource4You LLC
-            </h2>
-            <p className="mt-5 max-w-4xl text-lg leading-8 text-gray-700">
-              In addition to our clinical and operational work, contributions help support recovery-focused outreach,
-              service development, and the continued growth of programs that serve individuals and families in need.
-            </p>
-            <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="rounded-[1.5rem] bg-[#F9FAFB] p-6">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1E3A5F]/55">Donate via Cash App</p>
-                <div className="mt-5 space-y-3">
-                  {cashAppHandles.map((handle) => (
-                    <div key={handle} className="rounded-2xl bg-white px-5 py-4 text-2xl font-bold text-[#1E3A5F] shadow-sm">
-                      {handle}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="rounded-[1.5rem] bg-[#1E3A5F] p-6 text-white">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/60">Why Give</p>
-                <p className="mt-5 text-lg leading-8 text-white/88">
-                  Your support helps strengthen the work, reach, and long-term impact of LifeResource4You LLC. Every
-                  contribution supports a broader mission of building programs, supporting recovery, and creating real
-                  opportunities for change.
-                </p>
-                <p className="mt-6 text-base font-semibold text-white/92">
-                  Send donations directly to either Cash App handle listed here.
-                </p>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
