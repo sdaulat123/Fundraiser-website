@@ -55,7 +55,6 @@ export function Impact() {
           ))}
         </div>
 
-        {/* Testimonial Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -75,7 +74,7 @@ export function Impact() {
             <div className="relative">
               <Quote className="w-12 h-12 text-[#6BAF92] mb-6" />
               <blockquote className="text-2xl text-gray-700 leading-relaxed mb-6 italic">
-                "The Chandler House gave me the stability I needed to focus on my recovery. Having a safe place to call home made all the difference in my journey."
+                "LifeResource4you gave me the stability I needed to focus on my recovery. Having a safe place to call home made all the difference in my journey."
               </blockquote>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-[#6BAF92] rounded-full flex items-center justify-center">
@@ -83,7 +82,7 @@ export function Impact() {
                 </div>
                 <div>
                   <div className="font-bold text-[#1E3A5F]">Former Resident</div>
-                  <div className="text-gray-600">The Chandler House</div>
+                  <div className="text-gray-600">LifeResource4you</div>
                 </div>
               </div>
             </div>

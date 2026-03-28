@@ -31,10 +31,10 @@ export function About() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-[#1E3A5F] mb-6">
-            About The Chandler House
+            About LifeResource4you
           </h2>
           <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            Located on Monterey Street, The Chandler House is more than just a residence—it's a community dedicated to supporting 7 individuals on their journey of recovery. We provide a stable, safe environment focused on rebuilding lives and fostering lasting change through compassion and structured support.
+            LifeResource4you is more than just a residence focused on recovery. We provide a stable, safe environment dedicated to rebuilding lives and fostering lasting change through compassion and structured support across our Arizona locations.
           </p>
         </motion.div>
 

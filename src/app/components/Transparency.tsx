@@ -94,7 +94,7 @@ export function Transparency() {
         >
           <div className="inline-block bg-gradient-to-br from-[#1E3A5F]/5 to-[#6BAF92]/5 rounded-2xl p-8 border border-[#6BAF92]/20">
             <p className="text-lg text-gray-700">
-              <span className="font-bold text-[#1E3A5F]">100% of your donation</span> goes directly to improving The Chandler House and supporting our residents' recovery journey.
+              <span className="font-bold text-[#1E3A5F]">100% of your donation</span> goes directly to improving LifeResource4you and supporting our residents' recovery journey.
             </p>
           </div>
         </motion.div>

@@ -19,7 +19,7 @@ export function Hero() {
       <div className="absolute inset-0">
         <ImageWithFallback
           src="https://images.unsplash.com/photo-1641014737626-99a16cd6c007?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yJTIwYmx1ZXxlbnwxfHx8fDE3NzQ2MjU5Mjh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-          alt="The Chandler House"
+          alt="LifeResource4you"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A5F]/95 via-[#1E3A5F]/85 to-[#6BAF92]/70"></div>
@@ -38,9 +38,9 @@ export function Hero() {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
         >
-          Supporting Recovery.
+          Life Resource
           <br />
-          Rebuilding Lives.
+          The Right Resource For You
         </motion.h1>
 
         <motion.p
@@ -49,7 +49,7 @@ export function Hero() {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto"
         >
-          Home to 7 individuals in recovery building a safer future
+          Life resource, the right resource for you
         </motion.p>
 
         <motion.div
