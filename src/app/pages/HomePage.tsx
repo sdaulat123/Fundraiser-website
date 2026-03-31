@@ -18,6 +18,7 @@ const coreServices = [
 ];
 
 const cashAppHandles = ["$DrGeeee", "$DrHamilton4you"];
+const fundraisingGoal = 3500;
 
 const featureCards = [
   {
@@ -120,16 +121,23 @@ export function HomePage() {
           >
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">Fundraising Support</p>
             <h2 className="mt-4 text-3xl font-bold text-[#1E3A5F] md:text-4xl">
-              Support the mission behind LifeResource4You LLC
+              Help us raise ${fundraisingGoal.toLocaleString()} for LifeResource4You LLC
             </h2>
             <p className="mt-5 max-w-4xl text-lg leading-8 text-gray-700">
-              In addition to our clinical and operational work, contributions help support recovery-focused outreach,
-              service development, and the continued growth of programs that serve individuals and families in need.
+              We are actively raising ${fundraisingGoal.toLocaleString()} to support recovery-focused outreach, service
+              development, and the continued growth of programs that serve individuals and families in need.
             </p>
             <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="rounded-[1.5rem] bg-[#F9FAFB] p-6">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1E3A5F]/55">Donate via Cash App</p>
-                <div className="mt-5 space-y-3">
+                <div className="rounded-2xl bg-[#1E3A5F] px-5 py-4 text-white shadow-sm">
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/65">Fundraising Goal</p>
+                  <p className="mt-2 text-3xl font-bold">${fundraisingGoal.toLocaleString()}</p>
+                  <p className="mt-2 text-sm leading-6 text-white/80">
+                    Every donation moves this campaign closer to the full amount we need to raise.
+                  </p>
+                </div>
+                <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-[#1E3A5F]/55">Donate via Cash App</p>
+                <div className="mt-4 space-y-3">
                   {cashAppHandles.map((handle) => (
                     <div key={handle} className="rounded-2xl bg-white px-5 py-4 text-2xl font-bold text-[#1E3A5F] shadow-sm">
                       {handle}
@@ -140,9 +148,8 @@ export function HomePage() {
               <div className="rounded-[1.5rem] bg-[#1E3A5F] p-6 text-white">
                 <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/60">Why Give</p>
                 <p className="mt-5 text-lg leading-8 text-white/88">
-                  Your support helps strengthen the work, reach, and long-term impact of LifeResource4You LLC. Every
-                  contribution supports a broader mission of building programs, supporting recovery, and creating real
-                  opportunities for change.
+                  Our immediate goal is to raise ${fundraisingGoal.toLocaleString()}. Your support helps strengthen the
+                  work, reach, and long-term impact of LifeResource4You LLC while creating real opportunities for change.
                 </p>
                 <p className="mt-6 text-base font-semibold text-white/92">
                   Send donations directly to either Cash App handle listed here.

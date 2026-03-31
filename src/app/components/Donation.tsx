@@ -3,6 +3,7 @@ import { CheckCircle, Shield, Heart } from "lucide-react";
 
 export function Donation() {
   const cashAppHandles = ["$DrGeeee", "$DrHamilton4you"];
+  const fundraisingGoal = 3500;
 
   return (
     <section id="donation" className="py-20 md:py-28 bg-gradient-to-br from-[#1E3A5F] to-[#6BAF92] relative overflow-hidden">
@@ -21,10 +22,11 @@ export function Donation() {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Make a Difference Today
+            Help us raise ${fundraisingGoal.toLocaleString()} today
           </h2>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Your generosity directly supports safety improvements, home modifications, and security enhancements
+            Your generosity directly supports the ${fundraisingGoal.toLocaleString()} campaign for outreach, service
+            development, and recovery-focused support.
           </p>
         </motion.div>
 
@@ -36,6 +38,10 @@ export function Donation() {
           className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl"
         >
           <div className="mb-6 rounded-2xl bg-[#F9FAFB] p-5 text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1E3A5F]/70 mb-2">
+              Fundraising Goal
+            </p>
+            <p className="text-4xl font-bold text-[#1E3A5F]">${fundraisingGoal.toLocaleString()}</p>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1E3A5F]/70 mb-3">
               Donate via Cash App
             </p>
