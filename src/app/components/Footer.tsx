@@ -7,9 +7,9 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           <div>
-            <h3 className="text-2xl font-bold mb-4">LifeResource4You LLC</h3>
+            <h3 className="text-2xl font-bold mb-4">LifeResource4you</h3>
             <p className="text-white/80 leading-relaxed mb-4">
-              Building Clinics. Transforming Lives. Driving Results.
+              Supervised visitation, wraparound teen support, and shared living services rooted in accountability.
             </p>
             <div className="flex gap-4">
               <a
@@ -89,10 +89,10 @@ export function Footer() {
         <div className="pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/60 text-sm">
-              (c) 2026 LifeResource4You LLC. All rights reserved.
+              (c) 2026 LifeResource4you. All rights reserved.
             </p>
             <p className="text-white/60 text-sm text-center md:text-right">
-              We build programs. We build people. We build success.<br />
+              Real support. Real structure. Real work.<br />
             </p>
           </div>
         </div>
