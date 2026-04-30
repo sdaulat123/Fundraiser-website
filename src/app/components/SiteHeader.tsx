@@ -1,4 +1,5 @@
 import { NavLink } from "react-router";
+import { navigationRoutes } from "../routes";
 
 const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
   [
@@ -15,15 +16,11 @@ export function SiteHeader() {
         </NavLink>
 
         <nav className="flex items-center gap-2">
-          <NavLink to="/" end className={navLinkClassName}>
-            Home
-          </NavLink>
-          <NavLink to="/about" className={navLinkClassName}>
-            About Us
-          </NavLink>
-          <NavLink to="/services" className={navLinkClassName}>
-            Services Offered
-          </NavLink>
+          {navigationRoutes.map((route) => (
+            <NavLink key={route.path} to={route.path} end={route.end} className={navLinkClassName}>
+              {route.label}
+            </NavLink>
+          ))}
         </nav>
       </div>
     </header>

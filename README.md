@@ -11,6 +11,51 @@ Run `npm run dev` to start the website locally.
 
 Run `npm run build` to validate the app bundle.
 
+## Blog CMS
+
+The blog is now fully file-backed and managed through Decap CMS at `/admin`. Published posts live in `src/content/posts` as markdown files, and publishing from the admin commits those files back to GitHub.
+
+### Owner publishing flow
+
+1. The owner visits `/admin`.
+2. The owner signs in.
+3. The owner creates or edits a post.
+4. Publishing writes a commit to the GitHub-connected repository.
+5. Netlify rebuilds the site and the new blog content appears on `/blog`.
+
+### No public sign-up
+
+This admin is intended to be sign-in only.
+
+1. Deploy the site to Netlify.
+2. Enable Identity.
+3. Set Identity registration to `Invite only`.
+4. Enable Git Gateway for the site.
+5. Invite the owner account from Netlify Identity users.
+6. Optionally enable GitHub as the external provider for login so the owner signs in with GitHub.
+
+With `Invite only`, there is no open public sign-up path. The owner must be invited before access works.
+
+### Content model
+
+Blog posts are stored in:
+
+- `src/content/posts/*.md`
+- uploaded media in `public/uploads/blog`
+
+The CMS configuration is in:
+
+- `public/admin/config.yml`
+- `public/admin/index.html`
+
+### Local development
+
+Run `npm install`.
+
+Run `npm run dev`.
+
+The blog reads local markdown files during development and production builds.
+
 ## Telegram Automation
 
 The bot listens for Telegram messages, turns them into a structured task, asks Codex to apply a minimal code change, validates the build, then commits and pushes on success.

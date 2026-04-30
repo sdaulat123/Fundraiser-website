@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LifeResource4you Blog Admin</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #173b63, #6baf92);
+        color: #173b63;
+      }
+
+      #login-shell {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      #login-card {
+        width: min(460px, 100%);
+        border-radius: 32px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 24px 80px rgba(18, 41, 69, 0.24);
+        padding: 36px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 2rem;
+        line-height: 1.1;
+      }
+
+      p {
+        margin: 16px 0 0;
+        color: rgba(23, 59, 99, 0.75);
+        line-height: 1.7;
+      }
+
+      button {
+        margin-top: 28px;
+        border: 0;
+        border-radius: 999px;
+        background: #173b63;
+        color: white;
+        font: inherit;
+        font-weight: 700;
+        padding: 14px 22px;
+        cursor: pointer;
+      }
+
+      #status {
+        font-size: 0.95rem;
+      }
+    </style>
+    <script>
+      window.CMS_MANUAL_INIT = true;
+    </script>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  </head>
+  <body>
+    <main id="login-shell">
+      <section id="login-card">
+        <p style="margin-top: 0; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;">
+          Owner Blog Admin
+        </p>
+        <h1>Sign in to manage blog posts.</h1>
+        <p>
+          This admin area is private. There is no public sign-up here. Only invited owner accounts can sign in and publish posts.
+        </p>
+        <button id="sign-in" type="button">Sign In</button>
+        <p id="status">Waiting for sign-in.</p>
+      </section>
+    </main>
+    <script>
+      const statusEl = document.getElementById("status");
+      const loginShell = document.getElementById("login-shell");
+      const signInButton = document.getElementById("sign-in");
+
+      function initCms() {
+        loginShell.style.display = "none";
+        window.initCMS();
+      }
+
+      function setStatus(message) {
+        statusEl.textContent = message;
+      }
+
+      window.netlifyIdentity.init();
+
+      signInButton.addEventListener("click", () => {
+        setStatus("Opening secure sign-in...");
+        window.netlifyIdentity.open("login");
+      });
+
+      window.netlifyIdentity.on("init", (user) => {
+        if (user) {
+          setStatus("Signed in. Loading editor...");
+          initCms();
+        } else {
+          setStatus("Waiting for sign-in.");
+        }
+      });
+
+      window.netlifyIdentity.on("login", () => {
+        setStatus("Signed in. Loading editor...");
+        window.netlifyIdentity.close();
+        initCms();
+      });
+
+      window.netlifyIdentity.on("logout", () => {
+        window.location.reload();
+      });
+    </script>
+  </body>
+  </html>
