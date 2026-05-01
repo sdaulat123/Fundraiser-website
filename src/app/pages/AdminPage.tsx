@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { LoaderCircle, LogOut, NotebookPen, Plus, Save } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { LoaderCircle, LogOut, NotebookPen, Plus, Save, Search, Trash2 } from "lucide-react";
 
 type AdminPost = {
   title: string;
@@ -56,13 +56,26 @@ async function fetchJson<T>(input: RequestInfo, init?: RequestInit): Promise<T> 
 export function AdminPage() {
   const [session, setSession] = useState<AdminSession | null>(null);
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
+  const [posts, setPosts] = useState<AdminPost[]>([]);
   const [draft, setDraft] = useState<AdminPost>(emptyPost);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [panelError, setPanelError] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [pendingImageUpload, setPendingImageUpload] = useState<PendingImageUpload | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [editingSlug, setEditingSlug] = useState<string | null>(null);
+
+  const filteredPosts = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      return posts;
+    }
+
+    return posts.filter((post) => post.title.toLowerCase().includes(query) || post.slug.toLowerCase().includes(query));
+  }, [posts, searchQuery]);
 
   useEffect(() => {
     let isMounted = true;
@@ -102,6 +115,7 @@ export function AdminPage() {
         if (!isMounted) {
           return;
         }
+        setPosts(payload.posts);
         setPanelError("");
       })
       .catch((error) => {
@@ -168,8 +182,10 @@ export function AdminPage() {
   async function handleLogout() {
     await fetchJson("/api/admin/logout", { method: "POST" });
     setSession({ authenticated: false });
+    setPosts([]);
     setDraft(emptyPost);
     setStatusMessage("");
+    setEditingSlug(null);
   }
 
   function handleNewPost() {
@@ -177,6 +193,46 @@ export function AdminPage() {
     setPendingImageUpload(null);
     setStatusMessage("");
     setPanelError("");
+    setEditingSlug(null);
+  }
+
+  function handleEditPost(post: AdminPost) {
+    setDraft(post);
+    setEditingSlug(post.slug);
+    setPendingImageUpload(null);
+    setStatusMessage("");
+    setPanelError("");
+  }
+
+  async function handleDeletePost(post: AdminPost) {
+    const shouldDelete = window.confirm(`Delete "${post.title}"?`);
+    if (!shouldDelete) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setPanelError("");
+    setStatusMessage("");
+
+    try {
+      const payload = await fetchJson<{ posts: AdminPost[]; message: string }>("/api/admin/posts", {
+        method: "DELETE",
+        body: JSON.stringify({ post }),
+      });
+
+      setPosts(payload.posts);
+      setStatusMessage(payload.message);
+
+      if (editingSlug === post.slug) {
+        setDraft(emptyPost);
+        setEditingSlug(null);
+        setPendingImageUpload(null);
+      }
+    } catch (error) {
+      setPanelError(error instanceof Error ? error.message : "Unable to delete this post.");
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   async function handleSave(event: React.FormEvent<HTMLFormElement>) {
@@ -189,16 +245,18 @@ export function AdminPage() {
       const payload = await fetchJson<{ post: AdminPost; posts: AdminPost[]; message: string }>("/api/admin/posts", {
         method: "POST",
         body: JSON.stringify({
-          originalSlug: null,
+          originalSlug: editingSlug,
           post: {
             ...draft,
-            slug: draft.slug || slugify(draft.title),
+            slug: slugify(draft.slug || draft.title),
           },
           imageUpload: pendingImageUpload,
         }),
       });
 
+      setPosts(payload.posts);
       setDraft(payload.post);
+      setEditingSlug(payload.post.slug);
       setStatusMessage(payload.message);
       setPendingImageUpload(null);
     } catch (error) {
@@ -302,11 +360,58 @@ export function AdminPage() {
         ) : null}
 
         <div className="grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)]">
+          <aside className="rounded-[2rem] bg-white p-6 shadow-[0_20px_60px_rgba(30,58,95,0.08)]">
+            <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">
+              <Search className="h-4 w-4" />
+              Search Posts
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Search by title..."
+              className="mt-4 w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
+            />
+
+            <div className="mt-5 space-y-3">
+              {filteredPosts.length > 0 ? (
+                filteredPosts.map((post) => (
+                  <div key={post.slug} className="rounded-[1.5rem] border border-[#1E3A5F]/10 bg-[#F9FAFB] p-4">
+                    <p className="text-base font-semibold leading-6 text-[#1E3A5F]">{post.title}</p>
+                    <p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-[#1E3A5F]/50">{post.slug}</p>
+                    <div className="mt-4 flex gap-3">
+                      <button
+                        type="button"
+                        onClick={() => handleEditPost(post)}
+                        className="rounded-full bg-[#1E3A5F] px-4 py-2 text-sm font-semibold text-white"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeletePost(post)}
+                        disabled={isDeleting}
+                        className="inline-flex items-center gap-2 rounded-full border border-[#B42318]/15 px-4 py-2 text-sm font-semibold text-[#B42318] disabled:opacity-60"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-[1.5rem] border border-[#1E3A5F]/10 bg-[#F9FAFB] p-4 text-sm text-[#1E3A5F]/70">
+                  No posts found.
+                </div>
+              )}
+            </div>
+          </aside>
+
           <section className="rounded-[2rem] bg-white p-8 shadow-[0_20px_60px_rgba(30,58,95,0.08)] md:p-10">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">
                 <NotebookPen className="h-4 w-4" />
-                New Post
+                {editingSlug ? "Edit Post" : "New Post"}
               </div>
               <button
                 type="button"
@@ -330,9 +435,19 @@ export function AdminPage() {
                       setDraft((current) => ({
                         ...current,
                         title,
-                        slug: current.slug || slugify(title),
+                        slug: editingSlug ? current.slug : slugify(title),
                       }));
                     }}
+                    className="w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
+                    required
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Slug</span>
+                  <input
+                    type="text"
+                    value={draft.slug}
+                    onChange={(event) => setDraft((current) => ({ ...current, slug: slugify(event.target.value) }))}
                     className="w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
                     required
                   />

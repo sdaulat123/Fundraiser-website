@@ -126,6 +126,14 @@ function parseDataUrl(dataUrl) {
   };
 }
 
+function getManagedImagePath(imagePath) {
+  if (typeof imagePath !== "string" || !imagePath.startsWith("/uploads/blog/")) {
+    return null;
+  }
+
+  return `public${imagePath}`;
+}
+
 function extensionFromMimeType(mimeType, fallbackName) {
   const knownExtensions = {
     "image/jpeg": "jpg",
@@ -283,4 +291,34 @@ export async function savePostToGitHub(post, originalSlug, imageUpload) {
   }
 
   return normalizedPost;
+}
+
+export async function deletePostFromGitHub(post) {
+  const { branch } = requireToken();
+  const slug = slugify(post?.slug || "");
+
+  if (!slug) {
+    const error = new Error("Post slug is required.");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const postPath = `${POSTS_DIRECTORY}/${slug}.md`;
+  const postEntry = await getContentEntry(postPath, branch);
+
+  if (!postEntry?.sha) {
+    const error = new Error("Post not found.");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  await deleteContent(postPath, postEntry.sha, `Delete blog post: ${slug}`, branch);
+
+  const managedImagePath = getManagedImagePath(post.image);
+  if (managedImagePath) {
+    const imageEntry = await getContentEntry(managedImagePath, branch);
+    if (imageEntry?.sha) {
+      await deleteContent(managedImagePath, imageEntry.sha, `Delete blog image: ${slug}`, branch);
+    }
+  }
 }
