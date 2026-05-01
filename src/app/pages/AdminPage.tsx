@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { LoaderCircle, LogOut, NotebookPen, Plus, Save } from "lucide-react";
 
 type AdminPost = {
@@ -56,8 +56,6 @@ async function fetchJson<T>(input: RequestInfo, init?: RequestInit): Promise<T> 
 export function AdminPage() {
   const [session, setSession] = useState<AdminSession | null>(null);
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
-  const [posts, setPosts] = useState<AdminPost[]>([]);
-  const [selectedSlug, setSelectedSlug] = useState<string>("new");
   const [draft, setDraft] = useState<AdminPost>(emptyPost);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -65,11 +63,6 @@ export function AdminPage() {
   const [panelError, setPanelError] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [pendingImageUpload, setPendingImageUpload] = useState<PendingImageUpload | null>(null);
-
-  const selectedPost = useMemo(
-    () => posts.find((post) => post.slug === selectedSlug) ?? null,
-    [posts, selectedSlug],
-  );
 
   useEffect(() => {
     let isMounted = true;
@@ -109,13 +102,7 @@ export function AdminPage() {
         if (!isMounted) {
           return;
         }
-
-        setPosts(payload.posts);
         setPanelError("");
-
-        if (payload.posts.length > 0) {
-          setSelectedSlug((current) => (current === "new" ? payload.posts[0].slug : current));
-        }
       })
       .catch((error) => {
         if (isMounted) {
@@ -132,17 +119,6 @@ export function AdminPage() {
       isMounted = false;
     };
   }, [session?.authenticated]);
-
-  useEffect(() => {
-    if (selectedPost) {
-      setDraft(selectedPost);
-      setPendingImageUpload(null);
-      return;
-    }
-
-    setDraft(emptyPost);
-    setPendingImageUpload(null);
-  }, [selectedPost]);
 
   async function handleImageSelection(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -192,10 +168,15 @@ export function AdminPage() {
   async function handleLogout() {
     await fetchJson("/api/admin/logout", { method: "POST" });
     setSession({ authenticated: false });
-    setPosts([]);
-    setSelectedSlug("new");
     setDraft(emptyPost);
     setStatusMessage("");
+  }
+
+  function handleNewPost() {
+    setDraft(emptyPost);
+    setPendingImageUpload(null);
+    setStatusMessage("");
+    setPanelError("");
   }
 
   async function handleSave(event: React.FormEvent<HTMLFormElement>) {
@@ -208,7 +189,7 @@ export function AdminPage() {
       const payload = await fetchJson<{ post: AdminPost; posts: AdminPost[]; message: string }>("/api/admin/posts", {
         method: "POST",
         body: JSON.stringify({
-          originalSlug: selectedPost?.slug ?? null,
+          originalSlug: null,
           post: {
             ...draft,
             slug: draft.slug || slugify(draft.title),
@@ -217,8 +198,7 @@ export function AdminPage() {
         }),
       });
 
-      setPosts(payload.posts);
-      setSelectedSlug(payload.post.slug);
+      setDraft(payload.post);
       setStatusMessage(payload.message);
       setPendingImageUpload(null);
     } catch (error) {
@@ -322,42 +302,20 @@ export function AdminPage() {
         ) : null}
 
         <div className="grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)]">
-          <aside className="rounded-[2rem] bg-white p-6 shadow-[0_20px_60px_rgba(30,58,95,0.08)]">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">Posts</p>
+          <section className="rounded-[2rem] bg-white p-8 shadow-[0_20px_60px_rgba(30,58,95,0.08)] md:p-10">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">
+                <NotebookPen className="h-4 w-4" />
+                New Post
+              </div>
               <button
                 type="button"
-                onClick={() => setSelectedSlug("new")}
+                onClick={handleNewPost}
                 className="inline-flex items-center gap-2 rounded-full bg-[#1E3A5F] px-4 py-2 text-sm font-semibold text-white"
               >
                 <Plus className="h-4 w-4" />
                 New
               </button>
-            </div>
-
-            <div className="mt-5 space-y-3">
-              {posts.map((post) => (
-                <button
-                  key={post.slug}
-                  type="button"
-                  onClick={() => setSelectedSlug(post.slug)}
-                  className={[
-                    "w-full rounded-[1.5rem] border px-4 py-4 text-left transition",
-                    selectedSlug === post.slug
-                      ? "border-[#1E3A5F] bg-[#1E3A5F] text-white"
-                      : "border-[#1E3A5F]/10 bg-[#F9FAFB] text-[#1E3A5F]",
-                  ].join(" ")}
-                >
-                  <p className="text-base font-semibold leading-6">{post.title}</p>
-                </button>
-              ))}
-            </div>
-          </aside>
-
-          <section className="rounded-[2rem] bg-white p-8 shadow-[0_20px_60px_rgba(30,58,95,0.08)] md:p-10">
-            <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">
-              <NotebookPen className="h-4 w-4" />
-              {selectedPost ? "Edit Post" : "New Post"}
             </div>
 
             <form className="mt-8 space-y-8" onSubmit={handleSave}>
@@ -372,7 +330,7 @@ export function AdminPage() {
                       setDraft((current) => ({
                         ...current,
                         title,
-                        slug: selectedPost ? current.slug : slugify(title),
+                        slug: current.slug || slugify(title),
                       }));
                     }}
                     className="w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
