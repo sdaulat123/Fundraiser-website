@@ -13,57 +13,33 @@ Run `npm run build` to validate the app bundle.
 
 ## Blog CMS
 
-The Vercel-compatible blog setup uses Sanity.
+The owner blog now uses GitHub-backed markdown publishing.
 
 ### How it works
 
 1. The website is deployed on Vercel.
-2. The owner signs in to Sanity Studio.
-3. The owner creates or edits blog posts there.
-4. The site fetches published posts from Sanity and renders them on `/blog`.
+2. The owner signs in at `/admin`.
+3. The admin creates or edits a post.
+4. The server commits a markdown file into `src/content/posts` through the GitHub API.
+5. Vercel redeploys from `main`, and the updated post appears on `/blog`.
 
 ### Owner sign-in
 
-`/admin` is now the owner entrypoint. It does not use Netlify Identity or Git Gateway.
+### Required Vercel env vars
 
-Instead, `/admin` sends the owner to Sanity Studio once `VITE_SANITY_STUDIO_URL` is configured.
+- `ADMIN_USERNAME`
+- `ADMIN_PASSWORD`
+- `ADMIN_SESSION_SECRET`
+- `GITHUB_TOKEN`
+- `GITHUB_OWNER`
+- `GITHUB_REPO`
+- `GITHUB_BRANCH`
 
-There is no public sign-up on the website. Access is controlled by who you invite into the Sanity project.
+`GITHUB_TOKEN` must have repository write access so the publish endpoint can commit markdown files.
 
-### Frontend env vars
+### Content source
 
-Add these to your Vercel project:
-
-- `VITE_SANITY_PROJECT_ID`
-- `VITE_SANITY_DATASET`
-- `VITE_SANITY_API_VERSION`
-- `VITE_SANITY_USE_CDN`
-- `VITE_SANITY_STUDIO_URL`
-
-If you installed the native Vercel Sanity integration, this app now also reads:
-
-- `NEXT_PUBLIC_SANITY_PROJECT_ID`
-- `NEXT_PUBLIC_SANITY_DATASET`
-- `NEXT_PUBLIC_SANITY_API_VERSION`
-- `NEXT_PUBLIC_SANITY_USE_CDN`
-- `NEXT_PUBLIC_SANITY_STUDIO_URL`
-
-That means the existing Vercel integration values can be used directly for the frontend, and you usually only need to add the Studio URL manually.
-
-### Studio setup
-
-This repo includes a `studio/` app for Sanity Studio.
-
-1. Run `npm install`.
-2. Run `npm --prefix studio install`.
-3. Set `SANITY_STUDIO_PROJECT_ID` and `SANITY_STUDIO_DATASET`.
-4. Run `npm run cms:dev` locally.
-5. Deploy `studio/` as its own Vercel project or use Sanity-hosted Studio.
-6. Put that deployed Studio URL into `VITE_SANITY_STUDIO_URL` for the main site.
-
-### Content fallback
-
-Until Sanity is configured, the website still reads the local sample posts in `src/content/posts`.
+The public site reads blog posts from `src/content/posts`.
 
 ## Telegram Automation
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, CalendarDays, NotebookPen } from "lucide-react";
 import { Link } from "react-router";
-import { getBlogPosts, isSanityConfigured } from "../lib/blog";
+import { getBlogPosts } from "../lib/blog";
 import type { BlogPost } from "../types/blog";
 
 function formatPublishedDate(value: string) {
@@ -65,25 +65,14 @@ export function BlogPage() {
           >
             Use this page for service updates, intake guidance, educational content, and community-facing articles that help explain how LifeResource4you works.
           </motion.p>
-          {isSanityConfigured ? (
-            <motion.p
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.22 }}
-              className="mt-6 inline-flex max-w-4xl rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white/85 backdrop-blur-sm"
-            >
-              Published posts are loading from Sanity.
-            </motion.p>
-          ) : (
-            <motion.p
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.22 }}
-              className="mt-6 inline-flex max-w-4xl rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white/85 backdrop-blur-sm"
-            >
-              Showing local fallback posts until Sanity is configured.
-            </motion.p>
-          )}
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.22 }}
+            className="mt-6 inline-flex max-w-4xl rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white/85 backdrop-blur-sm"
+          >
+            New posts are published from the private owner admin and committed into GitHub automatically.
+          </motion.p>
         </div>
       </section>
 
@@ -131,13 +120,13 @@ export function BlogPage() {
             <h3 className="mt-4 text-3xl font-bold text-[#1E3A5F]">A place for ongoing communication, not static brochure copy.</h3>
             <div className="mt-6 space-y-4 text-gray-700">
               <p className="rounded-2xl bg-white px-5 py-4">
-                The owner signs in to Sanity Studio to write, edit, and publish posts whenever needed.
+                The owner signs in to the private admin to write, edit, and publish posts whenever needed.
               </p>
               <p className="rounded-2xl bg-white px-5 py-4">
-                The website reads published posts directly from Sanity on Vercel deployments.
+                Each publish creates or updates a markdown file in GitHub, then Vercel redeploys the site from `main`.
               </p>
               <p className="rounded-2xl bg-white px-5 py-4">
-                Access stays sign-in only because you invite the owner account into Sanity instead of exposing public registration.
+                Access stays sign-in only because the admin uses a private username and password instead of public registration.
               </p>
             </div>
           </motion.aside>

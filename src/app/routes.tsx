@@ -1,17 +1,13 @@
-import { Suspense, lazy, type ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { AboutPage } from "./pages/AboutPage";
+import { AdminPage } from "./pages/AdminPage";
 import { BlogPage } from "./pages/BlogPage";
 import { BlogPostPage } from "./pages/BlogPostPage";
 import { HomePage } from "./pages/HomePage";
 import { ServiceDetailPage } from "./pages/ServiceDetailPage";
 import { ServicesPage } from "./pages/ServicesPage";
 
-const AdminStudioPage = lazy(async () => {
-  const module = await import("./pages/AdminStudioPage");
-  return { default: module.AdminStudioPage };
-});
-
-function AdminStudioRoute() {
+function AdminRoute() {
   return (
     <Suspense
       fallback={
@@ -23,7 +19,7 @@ function AdminStudioRoute() {
         </div>
       }
     >
-      <AdminStudioPage />
+      <AdminPage />
     </Suspense>
   );
 }
@@ -68,7 +64,7 @@ export const appRoutes: AppRoute[] = [
   },
   {
     path: "/admin/*",
-    element: <AdminStudioRoute />,
+    element: <AdminRoute />,
   },
   {
     path: "/services/:slug",

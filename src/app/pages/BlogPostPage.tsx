@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { PortableText } from "@portabletext/react";
 import { motion } from "motion/react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router";
@@ -106,16 +105,10 @@ export function BlogPostPage() {
               className="mb-10 h-auto w-full rounded-[1.5rem] object-cover"
             />
           ) : null}
-          {typeof post.body === "string" ? (
-            <div
-              className="prose prose-lg max-w-none prose-headings:text-[#1E3A5F] prose-p:text-gray-700 prose-a:text-[#1E3A5F] prose-strong:text-[#1E3A5F]"
-              dangerouslySetInnerHTML={{ __html: post.bodyHtml ?? "" }}
-            />
-          ) : (
-            <div className="prose prose-lg max-w-none prose-headings:text-[#1E3A5F] prose-p:text-gray-700 prose-a:text-[#1E3A5F] prose-strong:text-[#1E3A5F]">
-              <PortableText value={post.body} />
-            </div>
-          )}
+          <div
+            className="prose prose-lg max-w-none prose-headings:text-[#1E3A5F] prose-p:text-gray-700 prose-a:text-[#1E3A5F] prose-strong:text-[#1E3A5F]"
+            dangerouslySetInnerHTML={{ __html: post.bodyHtml ?? "" }}
+          />
         </div>
       </section>
     </div>
