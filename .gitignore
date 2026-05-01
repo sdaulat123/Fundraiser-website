@@ -3,7 +3,10 @@ dist/
 .DS_Store
 *.log
 .env
+.env*.local
 logs/
 .codex-output/
 studio/.sanity/
 studio/dist/
+
+.vercel
