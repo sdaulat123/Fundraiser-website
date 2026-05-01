@@ -72,6 +72,13 @@ export function BlogPage() {
             transition={{ duration: 0.6 }}
             className="rounded-[2rem] bg-white p-8 shadow-[0_20px_60px_rgba(30,58,95,0.08)] md:p-10"
           >
+            {featuredPost?.coverImage ? (
+              <img
+                src={featuredPost.coverImage}
+                alt={featuredPost.coverImageAlt ?? featuredPost.title}
+                className="mb-8 h-auto max-h-[28rem] w-full rounded-[1.5rem] object-cover"
+              />
+            ) : null}
             <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#1E3A5F]/55">
               <NotebookPen className="h-4 w-4" />
               {featuredPost?.category ?? "Blog"}
@@ -120,6 +127,13 @@ export function BlogPage() {
                   transition={{ duration: 0.55, delay: index * 0.08 }}
                   className="rounded-3xl border border-[#1E3A5F]/10 bg-white p-7 shadow-[0_16px_45px_rgba(30,58,95,0.08)]"
                 >
+                  {post.coverImage ? (
+                    <img
+                      src={post.coverImage}
+                      alt={post.coverImageAlt ?? post.title}
+                      className="mb-5 h-52 w-full rounded-[1.5rem] object-cover"
+                    />
+                  ) : null}
                   <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">{post.category}</p>
                   <h3 className="mt-4 text-2xl font-bold leading-tight text-[#1E3A5F]">{post.title}</h3>
                   <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#1E3A5F]/60">
