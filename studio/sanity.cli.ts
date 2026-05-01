@@ -8,4 +8,7 @@ export default defineCliConfig({
     projectId,
     dataset,
   },
+  project: {
+    basePath: "/admin",
+  },
 });

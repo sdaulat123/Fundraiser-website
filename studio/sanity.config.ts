@@ -9,6 +9,7 @@ const dataset = process.env.SANITY_STUDIO_DATASET || "production";
 export default defineConfig({
   name: "default",
   title: "LifeResource4you Studio",
+  basePath: "/admin",
   projectId,
   dataset,
   plugins: [structureTool(), visionTool()],
