@@ -117,12 +117,8 @@ function toAdminPost(path, raw) {
   return {
     title: data.title || slug,
     slug,
-    category: data.category || "General",
-    excerpt: data.excerpt || "",
-    publishedAt: data.publishedAt || new Date().toISOString(),
-    coverImage: data.coverImage || "",
-    coverImageAlt: data.coverImageAlt || "",
-    body,
+    image: data.coverImage || "",
+    text: body.trim(),
   };
 }
 
@@ -135,20 +131,14 @@ function toMarkdown(post) {
     "---",
     `title: ${quoteFrontmatterValue(post.title)}`,
     `slug: ${quoteFrontmatterValue(post.slug)}`,
-    `category: ${quoteFrontmatterValue(post.category)}`,
-    `excerpt: ${quoteFrontmatterValue(post.excerpt)}`,
-    `publishedAt: ${quoteFrontmatterValue(post.publishedAt)}`,
+    `publishedAt: ${quoteFrontmatterValue(new Date().toISOString())}`,
   ];
 
-  if (post.coverImage) {
-    lines.push(`coverImage: ${quoteFrontmatterValue(post.coverImage)}`);
+  if (post.image) {
+    lines.push(`coverImage: ${quoteFrontmatterValue(post.image)}`);
   }
 
-  if (post.coverImageAlt) {
-    lines.push(`coverImageAlt: ${quoteFrontmatterValue(post.coverImageAlt)}`);
-  }
-
-  lines.push("---", "", post.body.trim(), "");
+  lines.push("---", "", post.text.trim(), "");
   return lines.join("\n");
 }
 
@@ -211,8 +201,8 @@ export async function savePostToGitHub(post, originalSlug) {
   const normalizedPost = {
     ...post,
     slug,
-    category: post.category || "General",
-    publishedAt: post.publishedAt || new Date().toISOString(),
+    image: post.image || "",
+    text: post.text || "",
   };
 
   const path = `${POSTS_DIRECTORY}/${slug}.md`;

@@ -4,12 +4,8 @@ import { LoaderCircle, LogOut, NotebookPen, Plus, Save } from "lucide-react";
 type AdminPost = {
   title: string;
   slug: string;
-  category: string;
-  excerpt: string;
-  publishedAt: string;
-  coverImage: string;
-  coverImageAlt: string;
-  body: string;
+  image: string;
+  text: string;
 };
 
 type AdminSession = {
@@ -20,12 +16,8 @@ type AdminSession = {
 const emptyPost: AdminPost = {
   title: "",
   slug: "",
-  category: "General",
-  excerpt: "",
-  publishedAt: new Date().toISOString().slice(0, 16),
-  coverImage: "",
-  coverImageAlt: "",
-  body: "",
+  image: "",
+  text: "",
 };
 
 function slugify(value: string) {
@@ -136,10 +128,7 @@ export function AdminPage() {
 
   useEffect(() => {
     if (selectedPost) {
-      setDraft({
-        ...selectedPost,
-        publishedAt: selectedPost.publishedAt.slice(0, 16),
-      });
+      setDraft(selectedPost);
       return;
     }
 
@@ -217,10 +206,10 @@ export function AdminPage() {
       <div className="min-h-screen bg-[#F9FAFB] px-6 py-24">
         <div className="mx-auto max-w-xl rounded-[2rem] bg-white p-10 shadow-[0_20px_60px_rgba(30,58,95,0.08)]">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">Owner Blog Admin</p>
-          <h1 className="mt-4 text-4xl font-bold text-[#1E3A5F]">Sign in to publish blog posts.</h1>
-          <p className="mt-5 text-lg leading-8 text-gray-700">
-            This admin writes markdown posts directly into the GitHub repository. Publishing a post creates a commit,
-            and Vercel redeploys from `main`.
+            <h1 className="mt-4 text-4xl font-bold text-[#1E3A5F]">Sign in to publish blog posts.</h1>
+            <p className="mt-5 text-lg leading-8 text-gray-700">
+            This admin is intentionally simple: title, one picture, and text. Publishing creates a markdown commit in
+            GitHub, and Vercel redeploys from `main`.
           </p>
 
           <form className="mt-8 space-y-5" onSubmit={handleLogin}>
@@ -322,8 +311,7 @@ export function AdminPage() {
                       : "border-[#1E3A5F]/10 bg-[#F9FAFB] text-[#1E3A5F]",
                   ].join(" ")}
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] opacity-70">{post.category}</p>
-                  <p className="mt-2 text-base font-semibold leading-6">{post.title}</p>
+                  <p className="text-base font-semibold leading-6">{post.title}</p>
                 </button>
               ))}
             </div>
@@ -354,72 +342,24 @@ export function AdminPage() {
                     required
                   />
                 </label>
-                <label className="block">
-                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Slug</span>
-                  <input
-                    type="text"
-                    value={draft.slug}
-                    onChange={(event) => setDraft((current) => ({ ...current, slug: slugify(event.target.value) }))}
-                    className="w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
-                    required
-                  />
-                </label>
-                <label className="block">
-                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Category</span>
-                  <input
-                    type="text"
-                    value={draft.category}
-                    onChange={(event) => setDraft((current) => ({ ...current, category: event.target.value }))}
-                    className="w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
-                    required
-                  />
-                </label>
-                <label className="block">
-                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Publish Date</span>
-                  <input
-                    type="datetime-local"
-                    value={draft.publishedAt}
-                    onChange={(event) => setDraft((current) => ({ ...current, publishedAt: event.target.value }))}
-                    className="w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
-                    required
-                  />
-                </label>
                 <label className="block md:col-span-2">
-                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Excerpt</span>
-                  <textarea
-                    value={draft.excerpt}
-                    onChange={(event) => setDraft((current) => ({ ...current, excerpt: event.target.value }))}
-                    className="min-h-28 w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
-                    required
-                  />
-                </label>
-                <label className="block">
-                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Cover Image URL</span>
+                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Picture URL</span>
                   <input
                     type="url"
-                    value={draft.coverImage}
-                    onChange={(event) => setDraft((current) => ({ ...current, coverImage: event.target.value }))}
-                    className="w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
-                  />
-                </label>
-                <label className="block">
-                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Cover Image Alt</span>
-                  <input
-                    type="text"
-                    value={draft.coverImageAlt}
-                    onChange={(event) => setDraft((current) => ({ ...current, coverImageAlt: event.target.value }))}
+                    value={draft.image}
+                    onChange={(event) => setDraft((current) => ({ ...current, image: event.target.value }))}
                     className="w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
                   />
                 </label>
               </div>
 
               <label className="block">
-                <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Post Body</span>
+                <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Text</span>
                 <textarea
-                  value={draft.body}
-                  onChange={(event) => setDraft((current) => ({ ...current, body: event.target.value }))}
+                  value={draft.text}
+                  onChange={(event) => setDraft((current) => ({ ...current, text: event.target.value }))}
                   className="min-h-[420px] w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 font-mono text-sm text-[#1E3A5F] outline-none transition focus:border-[#1E3A5F]"
-                  placeholder="Write markdown here..."
+                  placeholder="Write the post text here..."
                   required
                 />
               </label>
