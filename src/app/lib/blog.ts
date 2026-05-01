@@ -2,13 +2,16 @@ import { createClient } from "@sanity/client";
 import { getLocalBlogPostBySlug, getLocalBlogPosts } from "./blogLocal";
 import type { BlogPortableTextBlock, BlogPost } from "../types/blog";
 
-const projectId = import.meta.env.VITE_SANITY_PROJECT_ID;
-const dataset = import.meta.env.VITE_SANITY_DATASET;
-const apiVersion = import.meta.env.VITE_SANITY_API_VERSION ?? "2026-04-30";
-const useCdn = import.meta.env.VITE_SANITY_USE_CDN !== "false";
+const projectId = import.meta.env.VITE_SANITY_PROJECT_ID || import.meta.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const dataset = import.meta.env.VITE_SANITY_DATASET || import.meta.env.NEXT_PUBLIC_SANITY_DATASET;
+const apiVersion =
+  import.meta.env.VITE_SANITY_API_VERSION || import.meta.env.NEXT_PUBLIC_SANITY_API_VERSION || "2026-04-30";
+const useCdn =
+  (import.meta.env.VITE_SANITY_USE_CDN || import.meta.env.NEXT_PUBLIC_SANITY_USE_CDN || "true") !== "false";
 
 export const isSanityConfigured = Boolean(projectId && dataset);
-export const sanityStudioUrl = import.meta.env.VITE_SANITY_STUDIO_URL?.trim() || "";
+export const sanityStudioUrl =
+  import.meta.env.VITE_SANITY_STUDIO_URL?.trim() || import.meta.env.NEXT_PUBLIC_SANITY_STUDIO_URL?.trim() || "";
 
 const sanityClient = isSanityConfigured
   ? createClient({

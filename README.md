@@ -40,6 +40,16 @@ Add these to your Vercel project:
 - `VITE_SANITY_USE_CDN`
 - `VITE_SANITY_STUDIO_URL`
 
+If you installed the native Vercel Sanity integration, this app now also reads:
+
+- `NEXT_PUBLIC_SANITY_PROJECT_ID`
+- `NEXT_PUBLIC_SANITY_DATASET`
+- `NEXT_PUBLIC_SANITY_API_VERSION`
+- `NEXT_PUBLIC_SANITY_USE_CDN`
+- `NEXT_PUBLIC_SANITY_STUDIO_URL`
+
+That means the existing Vercel integration values can be used directly for the frontend, and you usually only need to add the Studio URL manually.
+
 ### Studio setup
 
 This repo includes a `studio/` app for Sanity Studio.
