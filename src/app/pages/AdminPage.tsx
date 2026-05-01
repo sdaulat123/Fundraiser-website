@@ -8,6 +8,12 @@ type AdminPost = {
   text: string;
 };
 
+type PendingImageUpload = {
+  dataUrl: string;
+  name: string;
+  type: string;
+};
+
 type AdminSession = {
   authenticated: boolean;
   username?: string;
@@ -58,6 +64,7 @@ export function AdminPage() {
   const [loginError, setLoginError] = useState("");
   const [panelError, setPanelError] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
+  const [pendingImageUpload, setPendingImageUpload] = useState<PendingImageUpload | null>(null);
 
   const selectedPost = useMemo(
     () => posts.find((post) => post.slug === selectedSlug) ?? null,
@@ -129,11 +136,40 @@ export function AdminPage() {
   useEffect(() => {
     if (selectedPost) {
       setDraft(selectedPost);
+      setPendingImageUpload(null);
       return;
     }
 
     setDraft(emptyPost);
+    setPendingImageUpload(null);
   }, [selectedPost]);
+
+  async function handleImageSelection(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      setPendingImageUpload(null);
+      return;
+    }
+
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+      reader.onerror = () => reject(new Error("Unable to read the selected image."));
+      reader.readAsDataURL(file);
+    });
+
+    setPendingImageUpload({
+      dataUrl,
+      name: file.name,
+      type: file.type,
+    });
+
+    setDraft((current) => ({
+      ...current,
+      image: dataUrl,
+    }));
+  }
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -176,14 +212,15 @@ export function AdminPage() {
           post: {
             ...draft,
             slug: draft.slug || slugify(draft.title),
-            publishedAt: new Date(draft.publishedAt).toISOString(),
           },
+          imageUpload: pendingImageUpload,
         }),
       });
 
       setPosts(payload.posts);
       setSelectedSlug(payload.post.slug);
       setStatusMessage(payload.message);
+      setPendingImageUpload(null);
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "Unable to publish this post.");
     } finally {
@@ -343,7 +380,19 @@ export function AdminPage() {
                   />
                 </label>
                 <label className="block md:col-span-2">
-                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Picture URL</span>
+                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Picture</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageSelection}
+                    className="w-full rounded-2xl border border-[#1E3A5F]/15 px-4 py-3 text-base text-[#1E3A5F] outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-[#1E3A5F] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white focus:border-[#1E3A5F]"
+                  />
+                  <p className="mt-2 text-sm text-[#1E3A5F]/65">
+                    Upload one image for the post. If you leave this alone, the current image stays as-is.
+                  </p>
+                </label>
+                <label className="block md:col-span-2">
+                  <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Or Picture URL</span>
                   <input
                     type="url"
                     value={draft.image}
@@ -352,6 +401,13 @@ export function AdminPage() {
                   />
                 </label>
               </div>
+
+              {draft.image ? (
+                <div className="rounded-[1.5rem] border border-[#1E3A5F]/10 bg-[#F9FAFB] p-4">
+                  <p className="mb-3 text-sm font-semibold text-[#1E3A5F]">Image Preview</p>
+                  <img src={draft.image} alt={draft.title || "Blog preview"} className="max-h-80 rounded-2xl object-cover" />
+                </div>
+              ) : null}
 
               <label className="block">
                 <span className="mb-2 block text-sm font-semibold text-[#1E3A5F]">Text</span>

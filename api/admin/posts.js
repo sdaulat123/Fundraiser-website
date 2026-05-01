@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
     if (req.method === "POST") {
       const body = await readJsonBody(req);
-      const savedPost = await savePostToGitHub(body.post || {}, body.originalSlug || null);
+      const savedPost = await savePostToGitHub(body.post || {}, body.originalSlug || null, body.imageUpload || null);
       const posts = await listPostsFromGitHub();
 
       res.status(200).json({

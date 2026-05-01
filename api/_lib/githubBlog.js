@@ -1,5 +1,6 @@
 const GITHUB_API_BASE = "https://api.github.com";
 const POSTS_DIRECTORY = "src/content/posts";
+const BLOG_UPLOADS_DIRECTORY = "public/uploads/blog";
 
 function encodeRepoPath(path) {
   return path
@@ -110,6 +111,38 @@ function decodeGitHubContent(content) {
   return Buffer.from(content, "base64").toString("utf8");
 }
 
+function parseDataUrl(dataUrl) {
+  const match = /^data:([^;]+);base64,(.+)$/.exec(dataUrl || "");
+
+  if (!match) {
+    const error = new Error("Invalid image upload payload.");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return {
+    mimeType: match[1],
+    buffer: Buffer.from(match[2], "base64"),
+  };
+}
+
+function extensionFromMimeType(mimeType, fallbackName) {
+  const knownExtensions = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/gif": "gif",
+    "image/svg+xml": "svg",
+  };
+
+  if (knownExtensions[mimeType]) {
+    return knownExtensions[mimeType];
+  }
+
+  const fallbackMatch = /\.([a-z0-9]+)$/i.exec(fallbackName || "");
+  return fallbackMatch ? fallbackMatch[1].toLowerCase() : "png";
+}
+
 function toAdminPost(path, raw) {
   const { data, body } = parseFrontmatter(raw);
   const slug = typeof data.slug === "string" && data.slug.trim() ? data.slug.trim() : path.split("/").pop().replace(/\.md$/, "");
@@ -176,6 +209,27 @@ async function putContent(path, content, message, sha, branch) {
   });
 }
 
+async function uploadImageToGitHub(slug, imageUpload, branch) {
+  if (!imageUpload?.dataUrl) {
+    return "";
+  }
+
+  const { mimeType, buffer } = parseDataUrl(imageUpload.dataUrl);
+  const extension = extensionFromMimeType(mimeType, imageUpload.name);
+  const filePath = `${BLOG_UPLOADS_DIRECTORY}/${slug}.${extension}`;
+  const existingEntry = await getContentEntry(filePath, branch);
+
+  await putContent(
+    filePath,
+    buffer,
+    existingEntry ? `Update blog image: ${slug}` : `Add blog image: ${slug}`,
+    existingEntry?.sha,
+    branch,
+  );
+
+  return `/uploads/blog/${slug}.${extension}`;
+}
+
 async function deleteContent(path, sha, message, branch) {
   const { owner, repo } = requireToken();
   return githubRequest(`/repos/${owner}/${repo}/contents/${encodeRepoPath(path)}`, {
@@ -188,7 +242,7 @@ async function deleteContent(path, sha, message, branch) {
   });
 }
 
-export async function savePostToGitHub(post, originalSlug) {
+export async function savePostToGitHub(post, originalSlug, imageUpload) {
   const { branch } = requireToken();
   const slug = slugify(post.slug || post.title);
 
@@ -198,10 +252,12 @@ export async function savePostToGitHub(post, originalSlug) {
     throw error;
   }
 
+  const uploadedImagePath = imageUpload?.dataUrl ? await uploadImageToGitHub(slug, imageUpload, branch) : "";
+
   const normalizedPost = {
     ...post,
     slug,
-    image: post.image || "",
+    image: uploadedImagePath || post.image || "",
     text: post.text || "",
   };
 
