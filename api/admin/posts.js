@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       res.status(200).json({
         post: savedPost,
         posts,
-        message: `Published "${savedPost.title}". GitHub committed the markdown file and Vercel will redeploy from main.`,
+        message: "Published!",
       });
       return;
     }
