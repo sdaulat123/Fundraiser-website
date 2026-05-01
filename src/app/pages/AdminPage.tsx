@@ -281,11 +281,7 @@ export function AdminPage() {
       <div className="min-h-screen bg-[#F9FAFB] px-6 py-24">
         <div className="mx-auto max-w-xl rounded-[2rem] bg-white p-10 shadow-[0_20px_60px_rgba(30,58,95,0.08)]">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">Owner Blog Admin</p>
-            <h1 className="mt-4 text-4xl font-bold text-[#1E3A5F]">Sign in to publish blog posts.</h1>
-            <p className="mt-5 text-lg leading-8 text-gray-700">
-            This admin is intentionally simple: title, one picture, and text. Publishing creates a markdown commit in
-            GitHub, and Vercel redeploys from `main`.
-          </p>
+          <h1 className="mt-4 text-4xl font-bold text-[#1E3A5F]">Sign in to publish blog posts.</h1>
 
           <form className="mt-8 space-y-5" onSubmit={handleLogin}>
             <label className="block">
