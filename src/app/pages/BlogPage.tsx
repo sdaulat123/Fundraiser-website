@@ -65,14 +65,6 @@ export function BlogPage() {
           >
             Use this page for service updates, intake guidance, educational content, and community-facing articles that help explain how LifeResource4you works.
           </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.22 }}
-            className="mt-6 inline-flex max-w-4xl rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white/85 backdrop-blur-sm"
-          >
-            New posts are published from the private owner admin and committed into GitHub automatically.
-          </motion.p>
         </div>
       </section>
 
