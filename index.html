@@ -7,7 +7,7 @@
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       <meta
         http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' data: https://images.unsplash.com; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+        content="default-src 'self'; img-src 'self' data: blob: https://images.unsplash.com https://*.sanity.io https://*.sanityusercontent.com; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; connect-src 'self' https://*.sanity.io https://*.sanityusercontent.com; media-src 'self' blob: https://*.sanity.io https://*.sanityusercontent.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
       />
       <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
       <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
