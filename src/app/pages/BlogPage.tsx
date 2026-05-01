@@ -72,7 +72,7 @@ export function BlogPage() {
       </section>
 
       <section className="px-6 py-20 md:py-24">
-        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="mx-auto max-w-6xl">
           <motion.article
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -107,28 +107,6 @@ export function BlogPage() {
               </Link>
             ) : null}
           </motion.article>
-
-          <motion.aside
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6, delay: 0.08 }}
-            className="rounded-[2rem] border border-[#1E3A5F]/10 bg-[#FFF7ED] p-8 shadow-[0_18px_55px_rgba(30,58,95,0.08)] md:p-10"
-          >
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">How To Use This</p>
-            <h3 className="mt-4 text-3xl font-bold text-[#1E3A5F]">A place for ongoing communication, not static brochure copy.</h3>
-            <div className="mt-6 space-y-4 text-gray-700">
-              <p className="rounded-2xl bg-white px-5 py-4">
-                The owner signs in to the private admin to write, edit, and publish posts whenever needed.
-              </p>
-              <p className="rounded-2xl bg-white px-5 py-4">
-                Each publish creates or updates a markdown file in GitHub, then Vercel redeploys the site from `main`.
-              </p>
-              <p className="rounded-2xl bg-white px-5 py-4">
-                Access stays sign-in only because the admin uses a private username and password instead of public registration.
-              </p>
-            </div>
-          </motion.aside>
         </div>
       </section>
 
