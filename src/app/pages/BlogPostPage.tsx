@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
+import { PortableText } from "@portabletext/react";
 import { motion } from "motion/react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router";
 import { getBlogPostBySlug } from "../lib/blog";
+import type { BlogPost } from "../types/blog";
 
 function formatPublishedDate(value: string) {
   return new Intl.DateTimeFormat("en-US", {
@@ -13,16 +16,30 @@ function formatPublishedDate(value: string) {
 
 export function BlogPostPage() {
   const { slug = "" } = useParams();
-  const post = getBlogPostBySlug(slug);
+  const [post, setPost] = useState<BlogPost | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getBlogPostBySlug(slug).then((nextPost) => {
+      if (isMounted) {
+        setPost(nextPost);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
 
   if (!post) {
     return (
       <div className="min-h-screen bg-[#F9FAFB] px-6 py-24">
         <div className="mx-auto max-w-4xl rounded-[2rem] bg-white p-10 shadow-[0_20px_60px_rgba(30,58,95,0.08)]">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">Blog</p>
-          <h1 className="mt-4 text-4xl font-bold text-[#1E3A5F]">Article not found.</h1>
+          <h1 className="mt-4 text-4xl font-bold text-[#1E3A5F]">Loading article...</h1>
           <p className="mt-5 text-lg leading-8 text-gray-700">
-            This post does not exist in the published blog content yet.
+            The article is loading from the blog content source.
           </p>
           <Link
             to="/blog"
@@ -89,10 +106,16 @@ export function BlogPostPage() {
               className="mb-10 h-auto w-full rounded-[1.5rem] object-cover"
             />
           ) : null}
-          <div
-            className="prose prose-lg max-w-none prose-headings:text-[#1E3A5F] prose-p:text-gray-700 prose-a:text-[#1E3A5F] prose-strong:text-[#1E3A5F]"
-            dangerouslySetInnerHTML={{ __html: post.bodyHtml }}
-          />
+          {typeof post.body === "string" ? (
+            <div
+              className="prose prose-lg max-w-none prose-headings:text-[#1E3A5F] prose-p:text-gray-700 prose-a:text-[#1E3A5F] prose-strong:text-[#1E3A5F]"
+              dangerouslySetInnerHTML={{ __html: post.bodyHtml ?? "" }}
+            />
+          ) : (
+            <div className="prose prose-lg max-w-none prose-headings:text-[#1E3A5F] prose-p:text-gray-700 prose-a:text-[#1E3A5F] prose-strong:text-[#1E3A5F]">
+              <PortableText value={post.body} />
+            </div>
+          )}
         </div>
       </section>
     </div>

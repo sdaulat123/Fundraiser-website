@@ -7,9 +7,13 @@
     "telegram:bot": "node --env-file=.env scripts/telegram-codex-bot.mjs",
     "telegram:test-parse": "node -e \"import('./scripts/lib/task-parser.mjs').then(async ({ parseTask }) => { const task = await parseTask({ rootDir: process.cwd(), allowedRoots: ['src','components'], message: process.argv.slice(1).join(' ') }); console.log(JSON.stringify(task, null, 2)); })\"",
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "cms:dev": "npm --prefix studio run dev",
+    "cms:build": "npm --prefix studio run build"
   },
   "dependencies": {
+    "@portabletext/react": "^4.0.3",
+    "@sanity/client": "^7.22.0",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@mui/icons-material": "7.3.5",
