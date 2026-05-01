@@ -12,6 +12,15 @@ export default defineConfig({
   basePath: "/admin",
   projectId,
   dataset,
+  auth: {
+    providers: [
+      {
+        name: "sanity",
+        title: "Email / Password",
+        url: "https://api.sanity.io/v1/auth/login/sanity",
+      },
+    ],
+  },
   plugins: [structureTool(), visionTool()],
   schema: {
     types: schemaTypes,
