@@ -15,6 +15,7 @@ function formatPublishedDate(value: string) {
 
 export function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -22,6 +23,7 @@ export function BlogPage() {
     getBlogPosts().then((nextPosts) => {
       if (isMounted) {
         setPosts(nextPosts);
+        setHasLoaded(true);
       }
     });
 
@@ -31,6 +33,7 @@ export function BlogPage() {
   }, []);
 
   const [featuredPost, ...recentPosts] = posts;
+  const hasPosts = posts.length > 0;
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
@@ -82,23 +85,27 @@ export function BlogPage() {
               {featuredPost?.category ?? "Blog"}
             </div>
             <h2 className="mt-5 text-3xl font-bold text-[#1E3A5F] md:text-4xl">
-              {featuredPost?.title ?? "Loading latest article..."}
+              {featuredPost?.title ?? (hasLoaded ? "No blog posts published yet." : "Loading latest article...")}
             </h2>
             <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#1E3A5F]/60">
               <CalendarDays className="h-4 w-4" />
-              {featuredPost ? formatPublishedDate(featuredPost.publishedAt) : "Preparing content"}
+              {featuredPost ? formatPublishedDate(featuredPost.publishedAt) : hasLoaded ? "Waiting for the first post" : "Preparing content"}
             </div>
             <p className="mt-6 text-lg leading-8 text-gray-700">
               {featuredPost?.excerpt ??
-                "The most recent post will appear here once blog content has loaded."}
+                (hasLoaded
+                  ? "This blog is ready, but there are no published posts on the site right now."
+                  : "The most recent post will appear here once blog content has loaded.")}
             </p>
-            <Link
-              to={featuredPost ? `/blog/${featuredPost.slug}` : "/blog"}
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#1E3A5F] px-5 py-3 text-sm font-semibold text-white"
-            >
-              Featured Article
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            {featuredPost ? (
+              <Link
+                to={`/blog/${featuredPost.slug}`}
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#1E3A5F] px-5 py-3 text-sm font-semibold text-white"
+              >
+                Featured Article
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            ) : null}
           </motion.article>
 
           <motion.aside
@@ -132,33 +139,39 @@ export function BlogPage() {
             <h2 className="mt-4 text-3xl font-bold text-[#1E3A5F] md:text-4xl">Published articles from the owner blog.</h2>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            {recentPosts.map((post, index) => (
-              <motion.article
-                key={post.slug}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.55, delay: index * 0.08 }}
-                className="rounded-3xl border border-[#1E3A5F]/10 bg-white p-7 shadow-[0_16px_45px_rgba(30,58,95,0.08)]"
-              >
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">{post.category}</p>
-                <h3 className="mt-4 text-2xl font-bold leading-tight text-[#1E3A5F]">{post.title}</h3>
-                <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#1E3A5F]/60">
-                  <CalendarDays className="h-4 w-4" />
-                  {formatPublishedDate(post.publishedAt)}
-                </div>
-                <p className="mt-5 leading-7 text-gray-600">{post.excerpt}</p>
-                <Link
-                  to={`/blog/${post.slug}`}
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#1E3A5F]"
+          {hasPosts ? (
+            <div className="grid gap-6 md:grid-cols-3">
+              {recentPosts.map((post, index) => (
+                <motion.article
+                  key={post.slug}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.55, delay: index * 0.08 }}
+                  className="rounded-3xl border border-[#1E3A5F]/10 bg-white p-7 shadow-[0_16px_45px_rgba(30,58,95,0.08)]"
                 >
-                  Read Article
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </motion.article>
-            ))}
-          </div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1E3A5F]/55">{post.category}</p>
+                  <h3 className="mt-4 text-2xl font-bold leading-tight text-[#1E3A5F]">{post.title}</h3>
+                  <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#1E3A5F]/60">
+                    <CalendarDays className="h-4 w-4" />
+                    {formatPublishedDate(post.publishedAt)}
+                  </div>
+                  <p className="mt-5 leading-7 text-gray-600">{post.excerpt}</p>
+                  <Link
+                    to={`/blog/${post.slug}`}
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#1E3A5F]"
+                  >
+                    Read Article
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </motion.article>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[2rem] border border-[#1E3A5F]/10 bg-white p-8 text-gray-700 shadow-[0_16px_45px_rgba(30,58,95,0.08)]">
+              No posts are currently published.
+            </div>
+          )}
         </div>
       </section>
     </div>
