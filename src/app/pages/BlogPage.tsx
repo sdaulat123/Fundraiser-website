@@ -60,14 +60,6 @@ export function BlogPage() {
           >
             Updates, guidance, and practical insight from the work happening across family support, teen services, and shared living.
           </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.16 }}
-            className="mt-6 max-w-4xl text-lg leading-8 text-white/90 md:text-xl"
-          >
-            Use this page for service updates, intake guidance, educational content, and community-facing articles that help explain how LifeResource4you works.
-          </motion.p>
         </div>
       </section>
 
