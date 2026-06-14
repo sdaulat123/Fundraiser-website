@@ -55,6 +55,47 @@ export const servicePages: ServiceContent[] = [
       "Immediate census growth and faster revenue generation through coordinated staffing and client acquisition.",
   },
   {
+    slug: "medical-transportation",
+    navLabel: "Medical Transportation",
+    eyebrow: "New Service",
+    title: "Medical Transportation - Reliable Non-Emergency Rides",
+    subtitle: "Safe, on-time transportation that keeps clients connected to care",
+    intro:
+      "Missed appointments cost clinics revenue and cost clients their recovery momentum. Our non-emergency medical transportation keeps members showing up - on time, every time. We move clients to IOP, PHP, medical appointments, court dates, housing placements, and back home with dependable, professional drivers.",
+    bullets: [
+      "Non-emergency medical transportation (NEMT)",
+      "Rides to and from IOP, PHP, and outpatient appointments",
+      "Pickups for housing placement and intake",
+      "Court date and case-management transport",
+      "Reliable, background-checked drivers",
+      "Clean, insured vehicles",
+      "Flexible scheduling built around clinic hours",
+      "Contract-ready for clinics, group homes, and case managers",
+    ],
+    highlight:
+      "Transportation is the hidden reason clients fall off. Solve it, and attendance, retention, and revenue all go up. We keep your census in the building.",
+  },
+  {
+    slug: "client-referral-system",
+    navLabel: "Client Referral",
+    eyebrow: "New Service",
+    title: "Client Referral System - A Steady Pipeline of Qualified Admissions",
+    subtitle: "Turn open slots into a full, qualified census",
+    intro:
+      "Empty beds and open IOP slots are lost revenue you never get back. Our client referral system feeds your programs a steady, qualified pipeline - clients who are screened, level-of-care matched, and ready to admit. We connect clinics, housing, and providers so every referral lands where it belongs.",
+    bullets: [
+      "Qualified client identification and screening",
+      "Level-of-care matching before referral",
+      "Warm hand-offs to IOP, PHP, BHRF, and housing",
+      "Referral network across clinical, housing, and transportation partners",
+      "Reduced no-show and drop-off rates",
+      "Tracking and follow-up on every referral",
+      "Built for clinics that need census now",
+    ],
+    highlight:
+      "A referral system is the difference between hoping clients show up and knowing they will. We turn open slots into admitted, revenue-generating clients.",
+  },
+  {
     slug: "housing-recovery-programs",
     navLabel: "Housing & Recovery",
     eyebrow: "Page 3",
